@@ -1,0 +1,6 @@
+dist/
+node_modules/
+FE/
+*.js
+!src/**/*.ts
+!test/**/*.ts
