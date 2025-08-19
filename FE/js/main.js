@@ -6,6 +6,7 @@ class PrincessBot {
     this.actionQueue = null;
     this.apiClient = null;
     this.mockGenerator = null;
+    this.audioUnlocked = false;
 
     this.elements = {};
     this.actionHistory = [];
@@ -54,8 +55,8 @@ class PrincessBot {
     // Initialize action queue
     this.actionQueue = new ActionQueue(this.animationManager);
 
-    // Initialize API client
-    this.apiClient = new ApiClient('http://localhost:3000');
+    // Initialize API client to backend on port 3005
+    this.apiClient = new ApiClient('http://localhost:3005');
     this.setupApiClientHandlers();
 
     // Initialize mock data generator
@@ -77,11 +78,11 @@ class PrincessBot {
   }
 
   setupApiClientHandlers() {
-    this.apiClient.onAction((data) => {
+    this.apiClient.onAction(data => {
       this.handleActionReceived(data);
     });
 
-    this.apiClient.onStatus((status) => {
+    this.apiClient.onStatus(status => {
       this.updateConnectionStatus(status);
     });
   }
@@ -110,7 +111,7 @@ class PrincessBot {
 
     // Text input - Enter key
     if (this.elements.textInput) {
-      this.elements.textInput.addEventListener('keypress', (event) => {
+      this.elements.textInput.addEventListener('keypress', event => {
         if (event.key === 'Enter') {
           this.sendTextInput();
         }
@@ -118,7 +119,7 @@ class PrincessBot {
     }
 
     // Sample text buttons
-    document.querySelectorAll('.sample-text-btn').forEach((btn) => {
+    document.querySelectorAll('.sample-text-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const text = btn.dataset.text;
         if (this.elements.textInput) {
@@ -129,9 +130,20 @@ class PrincessBot {
     });
 
     // Keyboard shortcuts
-    document.addEventListener('keydown', (event) => {
+    document.addEventListener('keydown', event => {
       this.handleKeyboard(event);
     });
+
+    // Unlock audio on first user interaction
+    const unlockHandler = () => {
+      this.unlockAudio();
+      document.removeEventListener('click', unlockHandler);
+      document.removeEventListener('keydown', unlockHandler);
+      document.removeEventListener('touchstart', unlockHandler);
+    };
+    document.addEventListener('click', unlockHandler);
+    document.addEventListener('keydown', unlockHandler);
+    document.addEventListener('touchstart', unlockHandler);
   }
 
   connectToBackend() {
@@ -152,13 +164,25 @@ class PrincessBot {
 
   startMockMode() {
     this.updateConnectionStatus('mock');
-    this.mockGenerator.start((actionData) => {
+    this.mockGenerator.start(actionData => {
       this.handleActionReceived(actionData);
     }, 7000); // Generate action every 7 seconds
   }
 
   handleActionReceived(data) {
     console.log('🎯 Processing received action:', data);
+
+    // If there is audio URL, play it
+    if (data && data.urlAudio) {
+      try {
+        const audio = new Audio(data.urlAudio);
+        audio.play().catch(e => {
+          console.warn('⚠️ Cannot auto-play audio:', e);
+        });
+      } catch (e) {
+        console.warn('⚠️ Audio playback error:', e);
+      }
+    }
 
     let actions = [];
 
@@ -184,6 +208,32 @@ class PrincessBot {
     this.animationManager.executeActions(actions);
   }
 
+  unlockAudio() {
+    if (this.audioUnlocked) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) {
+        this.audioUnlocked = true;
+        return;
+      }
+      const ctx = new AudioCtx();
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      source.start(0);
+      setTimeout(() => ctx.close().catch(() => {}), 0);
+      this.audioUnlocked = true;
+      console.log('🔓 Audio unlocked');
+    } catch (e) {
+      // Ignore unlock errors
+      this.audioUnlocked = true;
+    }
+  }
+
   addToHistory(actions) {
     const historyItem = {
       actions: actions,
@@ -206,7 +256,7 @@ class PrincessBot {
 
     this.elements.actionList.innerHTML = '';
 
-    this.actionHistory.forEach((item) => {
+    this.actionHistory.forEach(item => {
       const li = document.createElement('li');
       li.innerHTML = `
                 <strong>${item.actions.join(', ')}</strong>
@@ -340,30 +390,12 @@ class PrincessBot {
     this.elements.sendTextBtn.disabled = true;
 
     try {
-      // Send via WebSocket if connected
-      if (this.apiClient.isConnected) {
-        this.apiClient.sendTextInput(text);
+      // Always send via API client
+      const result = await this.apiClient.sendTextInput(text);
+      if (result && result.success) {
         this.updateTextStatus('✅ Đã gửi lệnh', 'success');
-        console.log('🎯 Text sent via WebSocket:', text);
       } else {
-        // Fallback to HTTP API
-        const response = await fetch('http://localhost:3001/api/analyze-text', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            text: text,
-          }),
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          this.updateTextStatus('✅ Đã gửi lệnh', 'success');
-          console.log('🎯 Text analysis requested:', result);
-        } else {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
+        this.updateTextStatus('⚠️ Gửi không thành công', 'error');
       }
 
       // Clear input after successful send

@@ -10,7 +10,7 @@ class ApiClient {
       console.log('📝 Analyzing text via API:', text);
       this.updateStatus('analyzing');
 
-      const response = await fetch(`${this.baseUrl}/api/actions/analyze`, {
+      const response = await fetch(`${this.baseUrl}/api/action/analyze`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,18 +22,20 @@ class ApiClient {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
-      console.log('🎯 Received action from API:', data);
+      const res = await response.json();
+      console.log('🎯 Received action from API:', res);
 
-      // Transform response to match expected format
+      // Normalize backend payload { data: { action, urlAudio, textInput }, timestamp }
+      const payload = res && res.data ? res.data : res;
+
       const actionData = {
-        action: data.action,
-        actions: data.actions,
-        originalText: data.originalText,
-        gptMessage: data.gptMessage,
-        timestamp: new Date(data.timestamp),
+        action: payload.action,
+        actions: payload.actions || (payload.action ? [payload.action] : undefined),
+        urlAudio: payload.urlAudio,
+        textInput: payload.textInput || payload.originalText,
+        timestamp: new Date(res.timestamp || Date.now()),
         type: 'api-response',
-        success: data.success,
+        success: true,
       };
 
       this.updateStatus('completed');

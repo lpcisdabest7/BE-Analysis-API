@@ -10,7 +10,7 @@ async function bootstrap() {
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // Serve static files from FE directory
+  // Serve static files from FE directory and set index.html
   app.useStaticAssets(join(__dirname, '..', 'FE'));
 
   // Serve audio files from public/audio directory
@@ -52,7 +52,7 @@ async function bootstrap() {
   logger.log(`🚀 Application is running on: http://localhost:${port}`);
   logger.log(`🌐 Frontend available at: http://localhost:${port}`);
   logger.log(`📚 Swagger documentation: http://localhost:${port}/api/docs`);
-  logger.log(`🎯 API endpoint: http://localhost:${port}/api/actions/analyze`);
+  logger.log(`🎯 API endpoint: http://localhost:${port}/api/action/analyze`);
 }
 
 bootstrap();

@@ -25,7 +25,7 @@ class Princess3D {
       75,
       window.innerWidth / window.innerHeight,
       0.1,
-      1000
+      1000,
     );
     this.camera.position.set(0, 5, 10);
 
@@ -41,7 +41,7 @@ class Princess3D {
     // Controls
     this.controls = new THREE.OrbitControls(
       this.camera,
-      this.renderer.domElement
+      this.renderer.domElement,
     );
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
@@ -54,7 +54,7 @@ class Princess3D {
     this.createGround();
 
     // Handle window resize
-    window.addEventListener("resize", () => this.onWindowResize());
+    window.addEventListener('resize', () => this.onWindowResize());
   }
 
   setupLighting() {
@@ -106,7 +106,7 @@ class Princess3D {
       heart.position.set(
         (Math.random() - 0.5) * 30,
         Math.random() * 10 + 5,
-        (Math.random() - 0.5) * 30
+        (Math.random() - 0.5) * 30,
       );
 
       // Floating animation
@@ -284,7 +284,7 @@ class Princess3D {
     // Initialize animation mixer (even though we're using custom animations)
     this.mixer = new THREE.AnimationMixer(group);
 
-    console.log("👸 Beautiful Princess with full body created successfully!");
+    console.log('👸 Beautiful Princess with full body created successfully!');
   }
 
   playAction(actionName) {
@@ -297,60 +297,64 @@ class Princess3D {
     const action = actionName.toLowerCase();
 
     // Map actions to animations with pattern matching
-    if (this.matchesPattern(action, ["nhảy múa", "dance", "múa", "khiêu vũ"])) {
+    if (this.matchesPattern(action, ['nhảy múa', 'dance', 'múa', 'khiêu vũ'])) {
       this.currentAnimation = this.danceAnimation();
     } else if (
-      this.matchesPattern(action, ["vẫy tay", "wave", "chào", "hello"])
+      this.matchesPattern(action, ['vẫy tay', 'wave', 'chào', 'hello'])
     ) {
       this.currentAnimation = this.waveAnimation();
     } else if (
-      this.matchesPattern(action, ["cúi chào", "bow", "cúi", "chào hỏi"])
+      this.matchesPattern(action, ['cúi chào', 'bow', 'cúi', 'chào hỏi'])
     ) {
       this.currentAnimation = this.bowAnimation();
     } else if (
-      this.matchesPattern(action, ["quay tròn", "spin", "quay", "xoay", "lăn"])
+      this.matchesPattern(action, ['quay tròn', 'spin', 'quay', 'xoay', 'lăn'])
     ) {
       this.currentAnimation = this.spinAnimation();
     } else if (
-      this.matchesPattern(action, ["nhảy lên", "jump", "nhảy", "bay", "fly"])
+      this.matchesPattern(action, ['nhảy lên', 'jump', 'nhảy', 'bay', 'fly'])
     ) {
       this.currentAnimation = this.jumpAnimation();
     } else if (
       this.matchesPattern(action, [
-        "nằm",
-        "lie",
-        "nằm xuống",
-        "thư giãn",
-        "relax",
-        "nghỉ",
+        'nằm',
+        'lie',
+        'nằm xuống',
+        'thư giãn',
+        'relax',
+        'nghỉ',
       ])
     ) {
       this.currentAnimation = this.lieDownAnimation();
-    } else if (this.matchesPattern(action, ["ngồi", "sit", "ngồi xuống"])) {
+    } else if (this.matchesPattern(action, ['ngủ', 'sleep'])) {
+      this.currentAnimation = this.sleepAnimation();
+    } else if (this.matchesPattern(action, ['đứng', 'stand', 'idle'])) {
+      this.currentAnimation = this.defaultAnimation();
+    } else if (this.matchesPattern(action, ['ngồi', 'sit', 'ngồi xuống'])) {
       this.currentAnimation = this.sitAnimation();
     } else if (
-      this.matchesPattern(action, ["chạy", "run", "nhanh", "vội vã"])
+      this.matchesPattern(action, ['chạy', 'run', 'nhanh', 'vội vã'])
     ) {
       this.currentAnimation = this.runAnimation();
-    } else if (this.matchesPattern(action, ["cười", "laugh", "vui", "happy"])) {
+    } else if (this.matchesPattern(action, ['cười', 'laugh', 'vui', 'happy'])) {
       this.currentAnimation = this.laughAnimation();
     } else if (
-      this.matchesPattern(action, ["giận", "angry", "mad", "bực tức"])
+      this.matchesPattern(action, ['giận', 'angry', 'mad', 'bực tức'])
     ) {
       this.currentAnimation = this.angryAnimation();
     } else if (
-      this.matchesPattern(action, ["lén lút", "sneak", "ninja", "nhanh nhẹn"])
+      this.matchesPattern(action, ['lén lút', 'sneak', 'ninja', 'nhanh nhẹn'])
     ) {
       this.currentAnimation = this.sneakAnimation();
     } else if (
-      this.matchesPattern(action, ["võ thuật", "martial", "karate", "đánh võ"])
+      this.matchesPattern(action, ['võ thuật', 'martial', 'karate', 'đánh võ'])
     ) {
       this.currentAnimation = this.martialArtsAnimation();
     } else if (
-      this.matchesPattern(action, ["điên cuồng", "crazy", "wild", "cuồng"])
+      this.matchesPattern(action, ['điên cuồng', 'crazy', 'wild', 'cuồng'])
     ) {
       this.currentAnimation = this.wildAnimation();
-    } else if (this.matchesPattern(action, ["vỗ tay", "clap", "applaud"])) {
+    } else if (this.matchesPattern(action, ['vỗ tay', 'clap', 'applaud'])) {
       this.currentAnimation = this.clapAnimation();
     } else {
       // For unknown actions, try to create a dynamic animation
@@ -361,9 +365,9 @@ class Princess3D {
   // Helper method to match action patterns
   matchesPattern(action, patterns) {
     return patterns.some(
-      (pattern) =>
+      pattern =>
         action.includes(pattern.toLowerCase()) ||
-        pattern.toLowerCase().includes(action)
+        pattern.toLowerCase().includes(action),
     );
   }
 
@@ -539,6 +543,37 @@ class Princess3D {
     return { stop: () => this.resetPose() };
   }
 
+  // Sleep animation: transition to lie pose and breathe
+  sleepAnimation() {
+    const duration = 3500;
+    const startTime = Date.now();
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      if (this.princess) {
+        const liePhase = Math.min(progress * 2, 1);
+        this.princess.rotation.z = liePhase * (Math.PI / 2);
+        this.princess.position.y = -liePhase * 1.2;
+
+        if (progress > 0.5) {
+          const breathe = Math.sin((elapsed - duration * 0.5) * 0.003) * 0.06;
+          this.princess.scale.y = 1 + breathe;
+        }
+      }
+
+      if (elapsed < duration) {
+        requestAnimationFrame(animate);
+      } else {
+        setTimeout(() => this.resetPose(), 1500);
+      }
+    };
+
+    animate();
+    return { stop: () => this.resetPose() };
+  }
+
   resetPose() {
     if (this.princess) {
       this.princess.rotation.set(0, 0, 0);
@@ -569,7 +604,7 @@ class Princess3D {
     this.controls.update();
 
     // Animate floating decorations
-    this.scene.traverse((child) => {
+    this.scene.traverse(child => {
       if (child.userData && child.userData.originalY !== undefined) {
         child.position.y =
           child.userData.originalY +
@@ -682,7 +717,7 @@ class Princess3D {
         this.princess.scale.set(
           1 + bounce * 0.1,
           1 + bounce * 0.1,
-          1 + bounce * 0.1
+          1 + bounce * 0.1,
         );
       }
 

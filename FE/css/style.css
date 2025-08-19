@@ -11,6 +11,16 @@ body {
     height: 100vh;
 }
 
+:root {
+    --primary-500: #667eea;
+    --primary-600: #5a6fe0;
+    --primary-700: #4a5cc4;
+    --success-500: #22c55e;
+    --success-600: #16a34a;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+}
+
 #container {
     position: relative;
     width: 100vw;
@@ -120,26 +130,35 @@ body {
     padding: 12px;
     border: none;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.2);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
     color: #fff;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 #controls button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
     transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
 }
 
 #controls button:active {
     transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 #controls button:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
+    background: linear-gradient(135deg, #9aa7ff 0%, #8a9aff 100%);
+    box-shadow: none;
+}
+
+#controls button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 /* Scrollbar styling */
@@ -214,21 +233,21 @@ body {
 
 #send-text-btn {
     padding: 12px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     font-size: 14px;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
 #send-text-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, #7c8cfc 0%, #8a5cb4 100%);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
 }
 
 #send-text-btn:disabled {
@@ -237,22 +256,28 @@ body {
     transform: none;
 }
 
+#send-text-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
 #analyze-audio-btn {
     padding: 10px 15px;
     border: none;
     border-radius: 8px;
-    background: rgba(76, 175, 80, 0.3);
+    background: linear-gradient(135deg, var(--success-500) 0%, var(--success-600) 100%);
     color: #fff;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
     white-space: nowrap;
 }
 
 #analyze-audio-btn:hover {
-    background: rgba(76, 175, 80, 0.5);
+    background: linear-gradient(135deg, #1fb455 0%, #129447 100%);
     transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.35);
 }
 
 #analyze-audio-btn:active {
@@ -263,6 +288,11 @@ body {
     opacity: 0.5;
     cursor: not-allowed;
     transform: none;
+}
+
+#analyze-audio-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35), 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 #text-status {
@@ -308,24 +338,28 @@ body {
     padding: 8px 14px;
     border: none;
     border-radius: 8px;
-    background: rgba(33, 150, 243, 0.4);
+    background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
     color: #fff;
     font-size: 12px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     font-weight: 500;
 }
 
 .sample-text-btn:hover {
-    background: rgba(33, 150, 243, 0.6);
+    background: linear-gradient(135deg, #4b8ef8 0%, #2d6ce9 100%);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
 }
 
 .sample-text-btn:active {
     transform: translateY(0);
+}
+
+.sample-text-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 0 8px 18px rgba(0, 0, 0, 0.3);
 }
 
 /* Responsive */

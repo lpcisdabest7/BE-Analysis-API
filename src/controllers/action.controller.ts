@@ -69,7 +69,6 @@ export class ActionController {
       const gptResult = await this.gptService.analyzeTextForActions(
         actionAnalysisDto.text,
       );
-
       const response = {
         data: {
           action: gptResult.action,

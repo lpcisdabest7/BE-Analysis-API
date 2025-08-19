@@ -144,6 +144,11 @@ class AnimationManager {
       "cui xuong": "look_down",
       "look down": "look_down",
 
+      // Sleep
+      "ngủ": "sleep",
+      "ngu": "sleep",
+      sleep: "sleep",
+
       // Default/Idle
       "đứng yên": "idle",
       "dung yen": "idle",
