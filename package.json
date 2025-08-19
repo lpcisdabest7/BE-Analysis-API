@@ -1,0 +1,30 @@
+{
+  "name": "demo-3d-socket",
+  "version": "1.0.0",
+  "description": "3D Audio Action Recognition Demo - Voice to 3D Animation",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "node websocket-server.js"
+  },
+  "keywords": [
+    "3d",
+    "voice-recognition",
+    "deepgram",
+    "openai",
+    "websocket",
+    "demo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@deepgram/sdk": "^3.3.6",
+    "cross-fetch": "^4.0.0",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.4",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Princess Action Bot</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="ui-overlay">
+            <div id="status">
+                <h2>🎯 Princess Action Bot</h2>
+                <div id="connection-status">Đang kết nối...</div>
+                <div id="current-action">Chờ hành động...</div>
+            </div>
+            
+            <div id="action-history">
+                <h3>📜 Lịch sử hành động:</h3>
+                <ul id="action-list"></ul>
+            </div>
+            
+            <div id="text-input-section">
+                <h3>💬 Nhập văn bản:</h3>
+                <div id="text-input-group">
+                    <input type="text" id="text-input" placeholder="Nhập lệnh cho công chúa (ví dụ: nhảy múa, vẫy tay...)" />
+                    <button id="send-text-btn">Gửi lệnh</button>
+                </div>
+                <div id="text-samples">
+                    <small>Ví dụ sáng tạo:</small>
+                    <button class="sample-text-btn" data-text="Bạn nằm ra cho tôi xem">Nằm ra</button>
+                    <button class="sample-text-btn" data-text="Chạy ngay đi">Chạy ngay</button>
+                    <button class="sample-text-btn" data-text="Bay lên trời như siêu nhân">Bay lên</button>
+                    <button class="sample-text-btn" data-text="Làm như ninja vậy">Như ninja</button>
+                    <button class="sample-text-btn" data-text="Giận quá rồi">Giận dữ</button>
+                    <button class="sample-text-btn" data-text="Vui vẻ lên nào">Vui vẻ</button>
+                    <button class="sample-text-btn" data-text="Làm gì đó điên cuồng">Điên cuồng</button>
+                    <button class="sample-text-btn" data-text="Thư giãn như đang tắm nắng">Thư giãn</button>
+                </div>
+                <div id="text-status">Sẵn sàng nhận lệnh...</div>
+            </div>
+            
+            <div id="controls">
+                <button id="connect-btn">Kết nối</button>
+                <button id="test-action-btn">Test Animation</button>
+            </div>
+        </div>
+        
+        <canvas id="three-canvas"></canvas>
+    </div>
+
+    <!-- Three.js và các thư viện -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <!-- Socket.io client -->
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    
+    <!-- Main application -->
+    <script src="js/princess3d.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
