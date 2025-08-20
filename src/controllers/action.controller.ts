@@ -71,7 +71,7 @@ export class ActionController {
       );
       const response = {
         data: {
-          action: gptResult.action,
+          actions: gptResult.actions,
           urlAudio: gptResult.urlAudio,
           textInput: gptResult.textInput,
         },
@@ -80,7 +80,9 @@ export class ActionController {
       };
 
       this.logger.log(
-        `Generated action: ${gptResult.action}, response: ${gptResult.response} for text: ${actionAnalysisDto.text}`,
+        `Generated actions: ${
+          Array.isArray(gptResult.actions) ? gptResult.actions.join(', ') : ''
+        }, response: ${gptResult.response} for text: ${actionAnalysisDto.text}`,
       );
       return response;
     } catch (error) {
@@ -88,7 +90,7 @@ export class ActionController {
 
       return {
         data: {
-          action: 'stand',
+          actions: ['stand'],
           response: 'Okay, standing up',
           urlAudio: '',
           textinput: actionAnalysisDto.text,

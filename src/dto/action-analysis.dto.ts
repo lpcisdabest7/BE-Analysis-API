@@ -15,10 +15,13 @@ export class ActionAnalysisRequestDto {
 
 export class ActionAnalysisDataDto {
   @ApiProperty({
-    description: 'Generated action for 3D character',
-    example: 'sit',
+    description:
+      'Generated actions for 3D character (can contain multiple actions parsed from the input)',
+    example: ['stand_up', 'walk'],
+    isArray: true,
+    type: String,
   })
-  action: string;
+  actions: string[];
 
   @ApiProperty({
     description: 'Natural language response from GPT',
