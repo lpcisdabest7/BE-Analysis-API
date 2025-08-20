@@ -80,7 +80,6 @@ EXAMPLES (do not include these in the output):
           result.actions = actions;
           result.response = response;
           result.urlAudio = cdnUrl;
-          result.textInput = text;
           return result;
         }
       } catch (e) {
@@ -90,13 +89,11 @@ EXAMPLES (do not include these in the output):
       result.actions = ['stand'];
       result.response = 'Okay, standing up now.';
       result.urlAudio = '';
-      result.textInput = text;
       return result;
     } catch (error) {
       this.logger.error(`GPT Service Error: ${error.message}`);
       result.actions = ['stand'];
       result.urlAudio = '';
-      result.textInput = text;
       return result;
     }
   }

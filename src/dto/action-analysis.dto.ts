@@ -34,12 +34,6 @@ export class ActionAnalysisDataDto {
     example: 'https://cdn.example.com/action-analysis/tts_1234567890.wav',
   })
   urlAudio: string;
-
-  @ApiProperty({
-    description: 'Original input text',
-    example: 'Sit down',
-  })
-  textInput: string;
 }
 
 export class ActionAnalysisResponseDto {

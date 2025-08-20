@@ -73,7 +73,6 @@ export class ActionController {
         data: {
           actions: gptResult.actions,
           urlAudio: gptResult.urlAudio,
-          textInput: gptResult.textInput,
         },
         timestamp: this.formatTimestamp(new Date()),
         path: req.originalUrl,
@@ -93,7 +92,6 @@ export class ActionController {
           actions: ['stand'],
           response: 'Okay, standing up',
           urlAudio: '',
-          textinput: actionAnalysisDto.text,
         },
         timestamp: this.formatTimestamp(new Date()),
         path: req.originalUrl,
