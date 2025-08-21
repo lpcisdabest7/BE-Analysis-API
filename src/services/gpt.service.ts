@@ -12,12 +12,16 @@ export class GptService {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       this.logger.warn('OpenAI API key not found in environment variables');
-      throw new Error('OPENAI_API_KEY is required');
+      this.logger.warn(
+        'GPT service will not be available until OPENAI_API_KEY is provided',
+      );
+      // Don't throw error, just set openai to null
+      this.openai = null;
+    } else {
+      this.openai = new OpenAI({
+        apiKey: apiKey,
+      });
     }
-
-    this.openai = new OpenAI({
-      apiKey: apiKey,
-    });
   }
   private readonly systemPrompt = `You are a 3D character that receives user commands in any language and replies in the SAME language as the input.
 
@@ -52,6 +56,16 @@ EXAMPLES (do not include these in the output):
   async analyzeTextForActions(text: string): Promise<ActionAnalysisDataDto> {
     const result: any = {};
     try {
+      if (!this.openai) {
+        this.logger.error(
+          'GPT service is not available. OPENAI_API_KEY is required.',
+        );
+        result.actions = ['stand'];
+        result.response = 'Service not available. Please configure API keys.';
+        result.urlAudio = '';
+        return result;
+      }
+
       this.logger.log(`Analyzing text with GPT: ${text}`);
 
       const completion = await this.openai.chat.completions.create({

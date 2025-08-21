@@ -15,10 +15,14 @@ export class TtsService {
     const apiKey = process.env.DEEPGRAM_API_KEY;
     if (!apiKey) {
       this.logger.warn('Deepgram API key not found in environment variables');
-      throw new Error('DEEPGRAM_API_KEY is required');
+      this.logger.warn(
+        'TTS service will not be available until DEEPGRAM_API_KEY is provided',
+      );
+      // Don't throw error, just set deepgram to null
+      this.deepgram = null;
+    } else {
+      this.deepgram = createClient(apiKey);
     }
-
-    this.deepgram = createClient(apiKey);
 
     // Tạo thư mục audio nếu chưa tồn tại
     if (!fs.existsSync(this.audioDir)) {
@@ -28,6 +32,12 @@ export class TtsService {
 
   async textToSpeech(text: string): Promise<{ cdnUrl: string }> {
     try {
+      if (!this.deepgram) {
+        throw new Error(
+          'TTS service is not available. DEEPGRAM_API_KEY is required.',
+        );
+      }
+
       this.logger.log(`Converting text to speech: ${text}`);
 
       // Tạo tên file unique

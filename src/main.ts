@@ -46,11 +46,14 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   // Start server
-  const port = process.env.NODE_PORT || 3000;
+  logger.log(`Environment NODE_PORT: ${process.env.NODE_PORT}`);
+  logger.log(
+    `All environment variables: ${JSON.stringify(process.env, null, 2)}`,
+  );
+  const port = process.env.NODE_PORT || 3002;
+  logger.log(`Using port: ${port}`);
   await app.listen(port);
 
-  logger.log(`🚀 Application is running on: http://localhost:${port}`);
-  logger.log(`🌐 Frontend available at: http://localhost:${port}`);
   logger.log(`📚 Swagger documentation: http://localhost:${port}/api/docs`);
   logger.log(`🎯 API endpoint: http://localhost:${port}/api/action/analyze`);
 }

@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: be-action-analysis
+    ports:
+      - '3002:3002'
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - NODE_PORT=3002
+    restart: unless-stopped
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "node", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  mynetwork:
+    external: true
