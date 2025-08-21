@@ -47,9 +47,7 @@ async function bootstrap() {
 
   // Start server
   logger.log(`Environment NODE_PORT: ${process.env.NODE_PORT}`);
-  logger.log(
-    `All environment variables: ${JSON.stringify(process.env, null, 2)}`,
-  );
+
   const port = process.env.NODE_PORT || 3002;
   logger.log(`Using port: ${port}`);
   await app.listen(port);
